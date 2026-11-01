@@ -28,6 +28,7 @@ This log records project setup and implementation actions in order. It describes
 22. Prepared the complete initial workspace snapshot for the authenticated GitHub connector: 11 files total, including the React UI, approved design sketch, blueprint, README, and work log. The shell-based Git push remains unauthenticated.
 23. Published the complete 11-file project tree through the authenticated GitHub connection and moved the remote `main` reference to the new commit. Verified GitHub reports the repository as private and the remote file blobs match the local project snapshot.
 24. The local Git commit and remote snapshot contain the same files, but their commit histories differ because the shell push had no GitHub credential. No credential was stored locally; ordinary shell pushes will need authentication and history alignment first.
+25. Updated the remote `WORK_LOG.md` through the authenticated GitHub connection to record the completed publication and the local Git authentication caveat. GitHub recorded the log update as a separate commit.
 
 ## Pending
 
