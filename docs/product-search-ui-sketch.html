@@ -1,0 +1,225 @@
+<div id="product-search-sketch">
+  <style>
+    #product-search-sketch {
+      --ps-ink: light-dark(#182b3c, #edf4f7);
+      --ps-muted: light-dark(#657789, #a6b6c3);
+      --ps-paper: light-dark(#ffffff, #17232d);
+      --ps-page: light-dark(#f4f7f8, #111a22);
+      --ps-line: light-dark(#dce5e9, #344450);
+      --ps-teal: light-dark(#087f83, #64d0ca);
+      --ps-teal-soft: light-dark(#e4f5f3, #173b3d);
+      --ps-blue-soft: light-dark(#e9f0f8, #253849);
+      --ps-orange: light-dark(#d97725, #ffb86b);
+      color: var(--ps-ink);
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    #product-search-sketch * { box-sizing: border-box; }
+    #product-search-sketch .product-window { background: var(--ps-page); border-radius: 18px; overflow: hidden; border: 1px solid var(--ps-line); }
+    #product-search-sketch .store-header { background: var(--ps-paper); border-bottom: 1px solid var(--ps-line); padding: 15px 22px 12px; }
+    #product-search-sketch .brand-row, #product-search-sketch .header-controls, #product-search-sketch .store-nav, #product-search-sketch .row-between, #product-search-sketch .toolbar, #product-search-sketch .product-line, #product-search-sketch .suggestion, #product-search-sketch .metric-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    #product-search-sketch .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px; letter-spacing:-.4px; white-space:nowrap; }
+    #product-search-sketch .brand-mark { display:grid; place-items:center; width:32px; height:32px; border-radius:10px; background:var(--ps-teal); color:white; font-weight:900; }
+    #product-search-sketch .header-controls { flex:1; max-width:610px; margin:0 auto; }
+    #product-search-sketch .searchbox { display:flex; align-items:center; gap:9px; flex:1; min-width:160px; border:1px solid var(--ps-line); border-radius:10px; background:var(--ps-paper); padding:10px 13px; color:var(--ps-muted); }
+    #product-search-sketch .searchbox strong { color:var(--ps-ink); font-weight:500; }
+    #product-search-sketch .search-action { color:var(--ps-teal); font-weight:700; }
+    #product-search-sketch .avatar { background:var(--ps-blue-soft); border-radius:50%; width:34px;height:34px;display:grid;place-items:center;font-weight:700; }
+    #product-search-sketch .store-nav { justify-content:flex-start; gap:23px; margin-top:13px; color:var(--ps-muted); font-size:13px; }
+    #product-search-sketch .store-nav .current { color:var(--ps-teal); font-weight:700; }
+    #product-search-sketch .demo-label { margin-left:auto; font-size:11px; border:1px solid var(--ps-line); color:var(--ps-muted); border-radius:999px; padding:4px 9px; }
+    #product-search-sketch .screen-tabs { padding:12px 18px 0; background:var(--ps-paper); border-bottom:1px solid var(--ps-line); }
+    #product-search-sketch .nav.nav-pills { gap:6px; overflow-x:auto; flex-wrap:nowrap; }
+    #product-search-sketch .nav-link { white-space:nowrap; font-size:12px; }
+    #product-search-sketch .page { padding:24px clamp(16px,3vw,36px) 34px; min-height:600px; }
+    #product-search-sketch .content-width { max-width:1120px; margin:0 auto; }
+    #product-search-sketch h1 { font-size:28px; letter-spacing:-.8px; line-height:1.16; margin:0 0 9px; }
+    #product-search-sketch h2 { font-size:18px; letter-spacing:-.3px; margin:0; }
+    #product-search-sketch h3 { font-size:14px; margin:0; }
+    #product-search-sketch p { margin:0; }
+    #product-search-sketch .muted { color:var(--ps-muted); }
+    #product-search-sketch .eyebrow { font-size:11px; font-weight:750; letter-spacing:.09em; color:var(--ps-teal); text-transform:uppercase; margin-bottom:8px; }
+    #product-search-sketch .btn { border-radius:9px; font-size:12px; padding:8px 12px; }
+    #product-search-sketch .btn-primary { background:var(--ps-teal); border-color:var(--ps-teal); color:white; }
+    #product-search-sketch .section-head { margin:26px 0 13px; }
+    #product-search-sketch .hero { display:grid; grid-template-columns:1.15fr .85fr; gap:28px; align-items:center; padding:31px; background:var(--ps-paper); border:1px solid var(--ps-line); border-radius:16px; }
+    #product-search-sketch .hero-copy { max-width:560px; }
+    #product-search-sketch .hero-copy p { color:var(--ps-muted); margin:0 0 19px; }
+    #product-search-sketch .hero-search { display:flex; gap:9px; max-width:520px; }
+    #product-search-sketch .hero-search .searchbox { padding:12px 14px; }
+    #product-search-sketch .hero-art { min-height:190px; border-radius:14px; background:linear-gradient(135deg,var(--ps-teal-soft),var(--ps-blue-soft)); display:grid; place-items:center; position:relative; overflow:hidden; }
+    #product-search-sketch .hero-art:before,#product-search-sketch .hero-art:after { content:""; position:absolute; border-radius:50%; background:color-mix(in srgb,var(--ps-teal) 13%,transparent); }
+    #product-search-sketch .hero-art:before { width:185px;height:185px;right:10%;top:-55px; }
+    #product-search-sketch .hero-art:after { width:120px;height:120px;left:9%;bottom:-53px; }
+    #product-search-sketch .hero-device { z-index:1; font-size:96px; filter:drop-shadow(0 12px 14px #18364b33); }
+    #product-search-sketch .category-row { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+    #product-search-sketch .category { background:var(--ps-paper); border:1px solid var(--ps-line); border-radius:11px; padding:13px; display:flex; align-items:center; gap:10px; font-weight:650; }
+    #product-search-sketch .category-icon { background:var(--ps-teal-soft); width:35px;height:35px;border-radius:10px;display:grid;place-items:center;font-size:18px; }
+    #product-search-sketch .product-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    #product-search-sketch .product-card { background:var(--ps-paper); border:1px solid var(--ps-line); border-radius:13px; overflow:hidden; }
+    #product-search-sketch .product-art { height:140px; display:grid;place-items:center;background:linear-gradient(140deg,var(--ps-blue-soft),var(--ps-teal-soft));font-size:58px;position:relative; }
+    #product-search-sketch .product-art .tag { position:absolute; left:10px; top:10px; font-size:10px; color:var(--ps-teal); background:var(--ps-paper); padding:4px 7px;border-radius:999px;font-weight:700; }
+    #product-search-sketch .product-info { padding:12px; }
+    #product-search-sketch .product-info .muted { font-size:11px; }
+    #product-search-sketch .price { font-weight:800; font-size:16px; margin-top:8px; }
+    #product-search-sketch .stars { color:#c5781a; font-size:11px; margin-top:4px; }
+    #product-search-sketch .results-layout { display:grid; grid-template-columns:205px 1fr; gap:24px; margin-top:22px; }
+    #product-search-sketch .filter { border-right:1px solid var(--ps-line); padding-right:17px; }
+    #product-search-sketch .filter-group { border-bottom:1px solid var(--ps-line); padding:14px 0; }
+    #product-search-sketch .filter-group h3 { margin-bottom:9px; }
+    #product-search-sketch .check { display:flex; gap:8px; align-items:center; font-size:12px; color:var(--ps-muted); padding:4px 0; }
+    #product-search-sketch .results-toolbar { padding:12px 0; border-bottom:1px solid var(--ps-line); font-size:12px; color:var(--ps-muted); }
+    #product-search-sketch .sort-select { border:1px solid var(--ps-line); border-radius:8px; background:var(--ps-paper); padding:7px 10px; color:var(--ps-ink); }
+    #product-search-sketch .result-card { display:grid;grid-template-columns:105px 1fr auto;gap:15px;align-items:center;padding:13px 0;border-bottom:1px solid var(--ps-line); }
+    #product-search-sketch .result-art { width:105px;height:90px;display:grid;place-items:center;font-size:43px;border-radius:10px;background:var(--ps-blue-soft); }
+    #product-search-sketch .result-card p { color:var(--ps-muted); font-size:12px; margin-top:5px; }
+    #product-search-sketch mark { background:var(--ps-teal-soft); color:var(--ps-teal); border-radius:3px; }
+    #product-search-sketch .availability { color:var(--ps-teal); font-size:11px; margin-top:6px; font-weight:700; }
+    #product-search-sketch .detail-layout { display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:18px; }
+    #product-search-sketch .gallery { min-height:360px; background:linear-gradient(140deg,var(--ps-blue-soft),var(--ps-teal-soft)); border-radius:15px;display:grid;place-items:center;font-size:150px;position:relative; }
+    #product-search-sketch .thumbs { display:flex;gap:8px;margin-top:10px; }
+    #product-search-sketch .thumb { width:55px;height:48px;border:1px solid var(--ps-line);border-radius:8px;background:var(--ps-paper);display:grid;place-items:center; }
+    #product-search-sketch .detail-buy { background:var(--ps-paper);border:1px solid var(--ps-line);border-radius:14px;padding:20px;margin-top:18px; }
+    #product-search-sketch .detail-price {font-size:28px;font-weight:800;margin:8px 0;}
+    #product-search-sketch .specs { display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin-top:20px;font-size:12px; }
+    #product-search-sketch .specs div { padding:9px 0;border-bottom:1px solid var(--ps-line); }
+    #product-search-sketch .specs span { color:var(--ps-muted); }
+    #product-search-sketch .manager-grid { display:grid;grid-template-columns:1fr 1.4fr;gap:20px;margin-top:20px; }
+    #product-search-sketch .form-panel, #product-search-sketch .table-panel { background:var(--ps-paper);border:1px solid var(--ps-line);border-radius:13px;padding:18px; }
+    #product-search-sketch .field { margin-top:13px; }
+    #product-search-sketch .field label { display:block;font-size:11px;font-weight:700;margin-bottom:5px; }
+    #product-search-sketch .field input, #product-search-sketch .field select { width:100%;border:1px solid var(--ps-line);border-radius:8px;padding:9px;background:var(--ps-paper);color:var(--ps-ink); }
+    #product-search-sketch table { width:100%;border-collapse:collapse;font-size:11px;margin-top:12px; }
+    #product-search-sketch th {text-align:left;color:var(--ps-muted);font-weight:650;padding:9px 6px;border-bottom:1px solid var(--ps-line);}
+    #product-search-sketch td {padding:10px 6px;border-bottom:1px solid var(--ps-line);vertical-align:middle;}
+    #product-search-sketch .status { color:var(--ps-teal);font-weight:700;white-space:nowrap; }
+    #product-search-sketch .lab-controls { display:flex;gap:10px;flex-wrap:wrap;margin:18px 0; }
+    #product-search-sketch .lab-controls label {font-size:11px;color:var(--ps-muted);display:grid;gap:5px;}
+    #product-search-sketch .lab-controls select { border:1px solid var(--ps-line);border-radius:8px;padding:8px 10px;background:var(--ps-paper);color:var(--ps-ink);min-width:130px; }
+    #product-search-sketch .metric-row { display:grid;grid-template-columns:repeat(3,1fr);gap:12px; }
+    #product-search-sketch .metric { background:var(--ps-paper);border:1px solid var(--ps-line);border-radius:12px;padding:14px; }
+    #product-search-sketch .metric span {display:block;font-size:11px;color:var(--ps-muted);}
+    #product-search-sketch .metric strong {font-size:23px;display:block;margin-top:5px;}
+    #product-search-sketch .chart { margin-top:18px;background:var(--ps-paper);border:1px solid var(--ps-line);border-radius:13px;padding:16px; }
+    #product-search-sketch .bars { height:190px;display:flex;align-items:end;gap:18px;padding:18px 18px 4px;border-bottom:1px solid var(--ps-line); }
+    #product-search-sketch .bar-group { flex:1;display:grid;justify-items:center;gap:7px;height:100%;align-content:end;font-size:10px;color:var(--ps-muted); }
+    #product-search-sketch .bar-pair { display:flex;align-items:end;gap:5px;height:135px; }
+    #product-search-sketch .bar { width:18px;border-radius:5px 5px 0 0;background:var(--ps-orange); }
+    #product-search-sketch .bar.optimized { background:var(--ps-teal); }
+    #product-search-sketch .legend { display:flex;gap:15px;font-size:11px;color:var(--ps-muted);margin-top:12px; }
+    #product-search-sketch .dot { display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ps-orange);margin-right:5px; }
+    #product-search-sketch .dot.teal {background:var(--ps-teal);}
+    #product-search-sketch .suggestion-box { position:relative;max-width:560px;background:var(--ps-paper);border:1px solid var(--ps-line);border-radius:12px;margin-top:8px;box-shadow:0 16px 38px #12334420;overflow:hidden; }
+    #product-search-sketch .suggestion { justify-content:flex-start;padding:11px 14px;border-bottom:1px solid var(--ps-line); }
+    #product-search-sketch .suggestion:last-child {border-bottom:0;}
+    #product-search-sketch .suggestion-icon {width:36px;height:36px;background:var(--ps-blue-soft);border-radius:8px;display:grid;place-items:center;font-size:20px;}
+    #product-search-sketch .suggestion-text {flex:1;}
+    #product-search-sketch .suggestion-text small {display:block;color:var(--ps-muted);font-size:11px;}
+    #product-search-sketch .keyboard {font-size:10px;color:var(--ps-muted);border:1px solid var(--ps-line);padding:2px 6px;border-radius:5px;}
+    @media(max-width:800px) {
+      #product-search-sketch .header-controls {max-width:unset;margin:10px 0 0;order:3;flex-basis:100%;}
+      #product-search-sketch .brand-row {flex-wrap:wrap;}
+      #product-search-sketch .store-nav {overflow:auto;gap:16px;}
+      #product-search-sketch .hero, #product-search-sketch .detail-layout, #product-search-sketch .manager-grid {grid-template-columns:1fr;}
+      #product-search-sketch .hero-art {min-height:135px;}
+      #product-search-sketch .category-row {grid-template-columns:repeat(2,1fr);}
+      #product-search-sketch .product-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+      #product-search-sketch .results-layout {grid-template-columns:1fr;}
+      #product-search-sketch .filter {border-right:0;border-bottom:1px solid var(--ps-line);display:flex;gap:16px;overflow:auto;}
+      #product-search-sketch .filter-group {min-width:120px;border:0;}
+      #product-search-sketch .page {padding:18px 14px 26px;}
+    }
+    @media(max-width:480px) { #product-search-sketch .product-grid{grid-template-columns:1fr 1fr;} #product-search-sketch .metric-row{grid-template-columns:1fr;} #product-search-sketch .result-card{grid-template-columns:72px 1fr;} #product-search-sketch .result-art{width:72px;height:72px;} #product-search-sketch .result-price{grid-column:2;} }
+  </style>
+  <div class="product-window">
+    <header class="store-header">
+      <div class="brand-row">
+        <div class="brand"><span class="brand-mark">F</span>Foundry<span style="font-weight:500;color:var(--ps-muted);font-size:12px">Catalog</span></div>
+        <div class="header-controls">
+          <div class="searchbox"><span aria-hidden="true">⌕</span><strong>Search products, brands, and categories</strong><span class="search-action">Search</span></div>
+        </div>
+        <div class="avatar" aria-label="Account">AM</div>
+      </div>
+      <nav class="store-nav" aria-label="Store navigation"><span class="current">All products</span><span>Computers</span><span>Audio</span><span>Home &amp; office</span><span>Accessories</span><span class="demo-label">Demo catalog · generated data</span></nav>
+    </header>
+    <div class="screen-tabs">
+      <div class="nav nav-pills" role="tablist" aria-label="Project screens">
+        <button class="nav-link active" id="tab-home" role="tab" aria-controls="screen-home" aria-selected="true" type="button">Catalog home</button>
+        <button class="nav-link" id="tab-suggest" role="tab" aria-controls="screen-suggest" aria-selected="false" type="button">Autocomplete</button>
+        <button class="nav-link" id="tab-results" role="tab" aria-controls="screen-results" aria-selected="false" type="button">Search results</button>
+        <button class="nav-link" id="tab-detail" role="tab" aria-controls="screen-detail" aria-selected="false" type="button">Product detail</button>
+        <button class="nav-link" id="tab-manager" role="tab" aria-controls="screen-manager" aria-selected="false" type="button">Catalog manager</button>
+        <button class="nav-link" id="tab-lab" role="tab" aria-controls="screen-lab" aria-selected="false" type="button">Search Lab</button>
+      </div>
+    </div>
+
+    <section class="page" id="screen-home" role="tabpanel" aria-labelledby="tab-home">
+      <div class="content-width">
+        <div class="hero">
+          <div class="hero-copy"><div class="eyebrow">Find it faster</div><h1>Search less.<br>Find the right gear.</h1><p>Search across a growing catalog with helpful suggestions, useful filters, and product details you can trust.</p><div class="hero-search"><div class="searchbox"><span>⌕</span><strong>Try “wireless headphones”</strong></div><button class="btn btn-primary" type="button">Search</button></div></div>
+          <div class="hero-art" aria-label="Featured laptop illustration"><span class="hero-device">💻</span></div>
+        </div>
+        <div class="row-between section-head"><h2>Browse categories</h2><span class="muted">Explore the catalog</span></div>
+        <div class="category-row"><div class="category"><span class="category-icon">💻</span>Computers</div><div class="category"><span class="category-icon">🎧</span>Audio</div><div class="category"><span class="category-icon">⌨️</span>Accessories</div><div class="category"><span class="category-icon">🖥️</span>Monitors</div><div class="category"><span class="category-icon">🏠</span>Home office</div></div>
+        <div class="row-between section-head"><h2>Popular in the catalog</h2><span class="search-action">View all →</span></div>
+        <div class="product-grid">
+          <article class="product-card"><div class="product-art"><span class="tag">Popular</span>💻</div><div class="product-info"><div class="muted">Dell · Laptop</div><h3>Dell Latitude 5440</h3><div class="stars">★★★★★ <span class="muted">(128)</span></div><div class="price">₹74,990</div></div></article>
+          <article class="product-card"><div class="product-art">🎧</div><div class="product-info"><div class="muted">Sony · Audio</div><h3>WH-1000XM5 Wireless</h3><div class="stars">★★★★★ <span class="muted">(96)</span></div><div class="price">₹29,990</div></div></article>
+          <article class="product-card"><div class="product-art">🖥️</div><div class="product-info"><div class="muted">LG · Monitor</div><h3>UltraFine 27-inch 4K</h3><div class="stars">★★★★☆ <span class="muted">(54)</span></div><div class="price">₹31,499</div></div></article>
+          <article class="product-card"><div class="product-art">⌨️</div><div class="product-info"><div class="muted">Keychron · Keyboard</div><h3>K2 Wireless Mechanical</h3><div class="stars">★★★★★ <span class="muted">(81)</span></div><div class="price">₹8,499</div></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="screen-suggest" role="tabpanel" aria-labelledby="tab-suggest" hidden>
+      <div class="content-width"><div class="eyebrow">Search interaction</div><h1>Suggestions as you type</h1><p class="muted">The shopper gets likely products before submitting a full query.</p>
+        <div style="margin-top:24px;max-width:600px"><div class="searchbox" style="padding:14px"><span>⌕</span><strong style="flex:1">Dell Latit</strong><span class="muted">×</span></div>
+          <div class="suggestion-box" role="listbox" aria-label="Product suggestions">
+            <div class="suggestion" role="option"><div class="suggestion-icon">💻</div><div class="suggestion-text"><strong>Dell Latitude 5440</strong><small>Laptop · 16 GB RAM · ₹74,990</small></div><span class="keyboard">↵</span></div>
+            <div class="suggestion" role="option"><div class="suggestion-icon">💻</div><div class="suggestion-text"><strong>Dell Latitude 7440</strong><small>Laptop · 16 GB RAM · ₹1,08,990</small></div></div>
+            <div class="suggestion" role="option"><div class="suggestion-icon">⌕</div><div class="suggestion-text"><strong>Search for “Dell Latit”</strong><small>See all matching products</small></div></div>
+          </div><p class="muted" style="font-size:11px;margin-top:10px">↑ ↓ to move · Enter to select · Esc to close</p>
+        </div>
+        <div class="section-head"><h2>What this screen communicates</h2></div><p class="muted">Suggestions are concise and ranked. Product name, category, and a useful detail help distinguish similar matches. Exact SKU lookups remain exact; typo tolerance applies to descriptive text.</p>
+      </div>
+    </section>
+
+    <section class="page" id="screen-results" role="tabpanel" aria-labelledby="tab-results" hidden>
+      <div class="content-width"><div class="searchbox" style="max-width:670px;padding:12px"><span>⌕</span><strong style="flex:1">Dell Latitde</strong><span class="search-action">Search</span></div>
+        <div class="results-layout"><aside class="filter"><h3>Filters</h3><div class="filter-group"><h3>Category</h3><label class="check"><input type="checkbox" checked> Laptops <span class="muted">(42)</span></label><label class="check"><input type="checkbox"> Accessories <span class="muted">(18)</span></label></div><div class="filter-group"><h3>Brand</h3><label class="check"><input type="checkbox" checked> Dell <span class="muted">(16)</span></label><label class="check"><input type="checkbox"> Lenovo <span class="muted">(12)</span></label></div><div class="filter-group"><h3>Availability</h3><label class="check"><input type="checkbox"> In stock now</label></div><div class="filter-group"><h3>Price range</h3><div class="muted">₹40,000 — ₹1,50,000</div></div></aside>
+          <div><div class="row-between"><div><div class="eyebrow">Search results</div><h2>Results for “Dell Latitde”</h2><p class="muted" style="font-size:12px;margin-top:4px">Showing matches for <strong>Dell Latitude</strong> · 16 products</p></div><select class="sort-select" aria-label="Sort results"><option>Relevance</option><option>Price: low to high</option><option>Newest</option></select></div>
+            <article class="result-card"><div class="result-art">💻</div><div><div class="muted">DELL · LAPTOP</div><h3>Dell Latitude 5440</h3><p>14-inch · Intel Core i7 · 16 GB RAM · 512 GB SSD</p><div class="availability">✓ In stock · Match: “Dell” + “Latitude”</div></div><div class="result-price"><div class="price">₹74,990</div><button class="btn" type="button">View product</button></div></article>
+            <article class="result-card"><div class="result-art">💻</div><div><div class="muted">DELL · LAPTOP</div><h3>Dell Latitude 7440</h3><p>14-inch · Intel Core i7 · 16 GB RAM · 1 TB SSD</p><div class="availability">✓ In stock · Strong text match</div></div><div class="result-price"><div class="price">₹1,08,990</div><button class="btn" type="button">View product</button></div></article>
+            <article class="result-card"><div class="result-art">💻</div><div><div class="muted">DELL · LAPTOP</div><h3>Dell Latitude 3540</h3><p>15.6-inch · Intel Core i5 · 16 GB RAM · 512 GB SSD</p><div class="availability">✓ In stock · Related model</div></div><div class="result-price"><div class="price">₹58,490</div><button class="btn" type="button">View product</button></div></article>
+            <div class="row-between" style="padding-top:16px"><span class="muted">1–12 of 16 products</span><div><button class="btn" type="button">← Previous</button> <button class="btn btn-primary" type="button">Next →</button></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="screen-detail" role="tabpanel" aria-labelledby="tab-detail" hidden>
+      <div class="content-width"><div class="muted" style="font-size:12px">Computers / Laptops / Dell</div><div class="detail-layout"><div><div class="gallery" aria-label="Dell Latitude laptop illustration">💻</div><div class="thumbs"><div class="thumb">💻</div><div class="thumb">⌨️</div><div class="thumb">🖥️</div></div></div>
+          <div><div class="eyebrow">Dell · Latitude series</div><h1>Dell Latitude 5440</h1><p class="muted">Business laptop · SKU: LAT-5440-I7-16</p><div class="stars" style="font-size:13px;margin:12px 0">★★★★★ <span class="muted">4.8 · 128 reviews</span></div><div class="detail-price">₹74,990</div><p class="muted">Current catalog price · Price and availability checked from the product record</p>
+            <div class="detail-buy"><div class="availability">✓ In stock</div><p style="margin:8px 0 14px">Ready to ship from the selected seller.</p><button class="btn btn-primary" type="button">Add to cart</button> <button class="btn" type="button">♡ Save</button></div>
+            <h2 style="margin-top:22px">Key specifications</h2><div class="specs"><div><span>Processor</span><br>Intel Core i7-1355U</div><div><span>Memory</span><br>16 GB DDR5</div><div><span>Display</span><br>14-inch FHD</div><div><span>Storage</span><br>512 GB SSD</div><div><span>Operating system</span><br>Windows 11 Pro</div><div><span>Weight</span><br>1.39 kg</div></div>
+          </div></div></div>
+    </section>
+
+    <section class="page" id="screen-manager" role="tabpanel" aria-labelledby="tab-manager" hidden>
+      <div class="content-width"><div class="row-between"><div><div class="eyebrow">Internal tool</div><h1>Catalog manager</h1><p class="muted">Manage the source catalog and see whether search has caught up.</p></div><button class="btn" type="button">Rebuild search index</button></div>
+        <div class="manager-grid"><section class="form-panel"><h2>Add or edit product</h2><div class="field"><label for="product-name">Product name</label><input id="product-name" value="Dell Latitude 5440"></div><div class="field"><label for="product-sku">SKU</label><input id="product-sku" value="LAT-5440-I7-16"></div><div class="field"><label for="product-category">Category</label><select id="product-category"><option>Laptops</option><option>Audio</option><option>Accessories</option></select></div><div class="field"><label for="product-price">Price (INR)</label><input id="product-price" value="74990"></div><div class="field"><label for="product-description">Description</label><input id="product-description" value="14-inch business laptop, 16 GB RAM"></div><div style="margin-top:15px"><button class="btn btn-primary" type="button">Save product</button> <span class="muted" style="font-size:11px">Save commits to PostgreSQL</span></div></section>
+          <section class="table-panel"><div class="row-between"><div><h2>Recent catalog changes</h2><p class="muted" style="font-size:11px;margin-top:4px">Search index status updates in the background</p></div><button class="btn" type="button">Export</button></div><table><thead><tr><th>Product</th><th>Updated</th><th>Search sync</th><th>Action</th></tr></thead><tbody><tr><td><strong>Dell Latitude 5440</strong><br><span class="muted">LAT-5440-I7-16</span></td><td>Just now</td><td><span class="status">● Current</span></td><td>Edit</td></tr><tr><td><strong>Sony WH-1000XM5</strong><br><span class="muted">SONY-XM5-BLK</span></td><td>4 min ago</td><td><span class="status">◷ Queued</span></td><td>Edit</td></tr><tr><td><strong>LG UltraFine 27</strong><br><span class="muted">LG-27UQ850</span></td><td>Today, 10:42</td><td><span class="status">● Current</span></td><td>Edit</td></tr><tr><td><strong>Keychron K2</strong><br><span class="muted">KEY-K2-WHT</span></td><td>Today, 10:38</td><td><span class="status" style="color:var(--ps-orange)">! Retry needed</span></td><td>Retry</td></tr></tbody></table></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="screen-lab" role="tabpanel" aria-labelledby="tab-lab" hidden>
+      <div class="content-width"><div class="eyebrow">Engineering view</div><h1>Search Lab</h1><p class="muted">Run the same query workload against different search backends and inspect the measured trade-offs.</p>
+        <div class="lab-controls"><label>Search backend<select><option>PostgreSQL · full-text + indexes</option><option>Meilisearch</option><option>Elasticsearch</option></select></label><label>Catalog size<select><option>1,000,000 products</option><option>100,000 products</option><option>10,000 products</option></select></label><label>Workload<select><option>Mixed shopper queries</option><option>Autocomplete heavy</option><option>Typo tolerance</option></select></label><button class="btn btn-primary" type="button">Run benchmark</button></div>
+        <p class="muted" style="font-size:11px;margin-bottom:12px">Illustrative screen only: sample values below are placeholders, not measured benchmark results.</p>
+        <div class="metric-row"><div class="metric"><span>p95 search latency</span><strong>— ms</strong><span>Waiting for a benchmark run</span></div><div class="metric"><span>Index update delay</span><strong>— sec</strong><span>Commit to searchable</span></div><div class="metric"><span>Request errors</span><strong>— %</strong><span>Across this workload</span></div></div>
+        <div class="chart"><div class="row-between"><div><h2>Latency by catalog size</h2><p class="muted" style="font-size:11px;margin-top:3px">p95 response time · milliseconds</p></div><span class="demo-label">No run selected</span></div><div class="bars" role="img" aria-label="Placeholder chart: benchmark results will appear here after a run"><div class="bar-group"><div class="bar-pair"><span class="bar" style="height:72%"></span><span class="bar optimized" style="height:34%"></span></div>10K products</div><div class="bar-group"><div class="bar-pair"><span class="bar" style="height:88%"></span><span class="bar optimized" style="height:42%"></span></div>100K products</div><div class="bar-group"><div class="bar-pair"><span class="bar" style="height:100%"></span><span class="bar optimized" style="height:51%"></span></div>1M products</div></div><div class="legend"><span><i class="dot"></i>Selected backend</span><span><i class="dot teal"></i>Comparison backend</span></div></div>
+        <div class="section-head"><h2>Run details</h2></div><p class="muted">Every result should record the machine, backend version, catalog seed, query mix, concurrency, run duration, and cache state so someone else can repeat it.</p>
+      </div>
+    </section>
+  </div>
+</div>
