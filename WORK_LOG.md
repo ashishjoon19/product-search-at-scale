@@ -26,9 +26,11 @@ This log records project setup and implementation actions in order. It describes
 20. Retried the Git push with network access; the remote rejected the shell attempt because no GitHub credential helper is available in this workspace. The authenticated GitHub connector is available, so I will use it to publish the initial project files instead of storing a credential locally.
 21. Published the repository README through the authenticated GitHub connection, creating the first remote commit and the `main` branch. The rest of the project files still need to be added; no personal email or credential was sent.
 22. Prepared the complete initial workspace snapshot for the authenticated GitHub connector: 11 files total, including the React UI, approved design sketch, blueprint, README, and work log. The shell-based Git push remains unauthenticated.
+23. Published the complete 11-file project tree through the authenticated GitHub connection and moved the remote `main` reference to the new commit. Verified GitHub reports the repository as private and the remote file blobs match the local project snapshot.
+24. The local Git commit and remote snapshot contain the same files, but their commit histories differ because the shell push had no GitHub credential. No credential was stored locally; ordinary shell pushes will need authentication and history alignment first.
 
 ## Pending
 
-- Create a private GitHub repository for this project, connect it as `origin`, and push the initial code and documentation.
+- Configure GitHub authentication for local Git and align local `main` with `origin/main` before a future shell push.
 - Install project dependencies and run the app once the required package access is available.
 - Add the API, PostgreSQL schema and migrations, synthetic data generator, search baseline, and benchmark runner in later milestones.
