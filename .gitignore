@@ -4,5 +4,9 @@ dist/
 .env.*
 !.env.example
 coverage/
+*.tsbuildinfo
 .DS_Store
 *.log
+logs/api-access.jsonl
+benchmarks/results/*
+!benchmarks/results/.gitkeep

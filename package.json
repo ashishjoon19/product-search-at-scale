@@ -4,18 +4,29 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -k -n web,api -c cyan,green \"vite\" \"tsx watch api/src/server.ts\"",
+    "dev:web": "vite",
+    "dev:api": "tsx watch api/src/server.ts",
     "build": "tsc -b && vite build",
+    "build:api": "tsc -p api/tsconfig.json",
+    "start:api": "node api/dist/server.js",
+    "db:migrate": "tsx scripts/migrate.ts",
     "preview": "vite preview"
   },
   "dependencies": {
+    "pg": "^8.23.1",
+    "pg-copy-streams": "^7.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.4.0",
+    "concurrently": "^10.0.6",
+    "tsx": "^4.23.15",
     "typescript": "~5.7.2",
     "vite": "^6.1.0"
   }
