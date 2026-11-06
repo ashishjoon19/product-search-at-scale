@@ -59,7 +59,7 @@ try {
     let released = false;
     const batchStart = performance.now();
     try {
-      const submitCopy = client.query as unknown as (query: unknown) => unknown;
+      const submitCopy = client.query.bind(client) as unknown as (query: unknown) => unknown;
       const sink = submitCopy(copy(`COPY products (sku,name,brand,category,description,specs,price,rating,reviews,stock,active) FROM STDIN WITH (FORMAT text)`)) as import('node:stream').Writable;
       for (let n = 0; n < amount; n += 1) {
         const line = `${product(inserted + n + 1)}\n`;

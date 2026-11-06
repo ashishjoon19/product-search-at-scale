@@ -11,9 +11,10 @@
     "build:api": "tsc -p api/tsconfig.json",
     "start:api": "node api/dist/server.js",
     "db:migrate": "tsx scripts/migrate.ts",
-    "preview": "vite preview",
     "db:seed": "tsx scripts/generate-catalog.ts",
-    "bench": "tsx scripts/benchmark.ts"
+    "bench": "tsx scripts/benchmark.ts",
+    "reindex:meili": "tsx scripts/reindex-meili.ts",
+    "preview": "vite preview"
   },
   "dependencies": {
     "pg": "^8.23.1",

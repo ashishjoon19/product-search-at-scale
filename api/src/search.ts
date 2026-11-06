@@ -39,39 +39,33 @@ function createWhere(input: SearchInput, parameterOffset = 0): WhereClause {
   const clauses = ['active = true'];
   const query = input.q.trim().toLocaleLowerCase();
   if (query) {
-    const exact = add(query);
-    const like = add(`%${escapeLike(query)}%`);
-    const exactClause = `search_text LIKE ${like} ESCAPE '\\'`;
-    if (input.mode === 'optimized' && query.length >= 3) {
-      const termClauses = query.split(/\s+/).filter(Boolean).map((term) => {
-        const fuzzyTerm = add(term);
-        const literalTerm = add(`%${escapeLike(term)}%`);
-        return term.length >= 3
-          ? `(search_text % ${fuzzyTerm} OR search_text LIKE ${literalTerm} ESCAPE '\\')`
-          : `search_text LIKE ${literalTerm} ESCAPE '\\'`;
-      });
-      clauses.push(`(${exactClause} OR (${termClauses.join(' AND ')}) OR search_vector @@ plainto_tsquery('simple', ${exact}))`);
+    if (input.mode === 'optimized') {
+      // Use PostgreSQL's inverted full-text index for the optimized path. The
+      // baseline keeps substring matching so the benchmark can compare plans.
+      const fullText = add(query);
+      clauses.push(`search_vector @@ plainto_tsquery('simple', ${fullText}::text)`);
     } else {
-      clauses.push(exactClause);
+      const like = add(`%${escapeLike(query)}%`);
+      clauses.push(`search_text LIKE ${like}::text ESCAPE '\\'`);
     }
   }
-  if (input.category) clauses.push(`category = ${add(input.category)}`);
-  if (input.brand) clauses.push(`brand = ${add(input.brand)}`);
+  if (input.category) clauses.push(`category = ${add(input.category)}::text`);
+  if (input.brand) clauses.push(`brand = ${add(input.brand)}::text`);
   if (input.inStock) clauses.push('stock > 0');
-  if (Number.isFinite(input.minPrice)) clauses.push(`price >= ${add(input.minPrice)}`);
-  if (Number.isFinite(input.maxPrice)) clauses.push(`price <= ${add(input.maxPrice)}`);
-  if (Number.isSafeInteger(input.maxId) && Number(input.maxId) > 0) clauses.push(`id <= ${add(input.maxId)}`);
+  if (Number.isFinite(input.minPrice)) clauses.push(`price >= ${add(input.minPrice)}::numeric`);
+  if (Number.isFinite(input.maxPrice)) clauses.push(`price <= ${add(input.maxPrice)}::numeric`);
+  if (Number.isSafeInteger(input.maxId) && Number(input.maxId) > 0) clauses.push(`id <= ${add(input.maxId)}::bigint`);
   return { sql: clauses.join(' AND '), values };
 }
 
 function relevanceExpression(query: string): string {
   if (!query) return '0::integer';
   return `CASE
-    WHEN lower(sku) = lower($1) THEN 100
-    WHEN lower(name) = lower($1) THEN 90
-    WHEN name ILIKE $2 ESCAPE '\\' THEN 70
-    WHEN name ILIKE $3 ESCAPE '\\' THEN 50
-    WHEN description ILIKE $3 ESCAPE '\\' THEN 30
+    WHEN lower(sku) = lower($1::text) THEN 100
+    WHEN lower(name) = lower($1::text) THEN 90
+    WHEN name ILIKE $2::text ESCAPE '\\' THEN 70
+    WHEN name ILIKE $3::text ESCAPE '\\' THEN 50
+    WHEN description ILIKE $3::text ESCAPE '\\' THEN 30
     ELSE 10
   END::integer`;
 }
@@ -109,18 +103,17 @@ export async function searchProducts(input: SearchInput): Promise<{
   WHERE true ${cursorClause}
   ORDER BY rank DESC, id ASC
   LIMIT ${limitParam}`;
-  const countSql = `SELECT count(*)::bigint AS total FROM products WHERE ${where.sql}`;
-  const categoryWhere = createWhere({ ...input, category: undefined }, queryParams.length);
-  const brandWhere = createWhere({ ...input, brand: undefined }, queryParams.length);
-  const rangeWhere = createWhere({ ...input, minPrice: undefined, maxPrice: undefined }, queryParams.length);
-  const categoryValues = [...queryParams, ...categoryWhere.values];
-  const brandValues = [...queryParams, ...brandWhere.values];
+  const countWhere = createWhere(input);
+  const countSql = `SELECT count(*)::bigint AS total FROM products WHERE ${countWhere.sql}`;
+  const categoryWhere = createWhere({ ...input, category: undefined });
+  const brandWhere = createWhere({ ...input, brand: undefined });
+  const rangeWhere = createWhere({ ...input, minPrice: undefined, maxPrice: undefined });
   const [rows, count, categories, brands, range] = await Promise.all([
     pool.query(searchSql, values),
-    pool.query(countSql, values.slice(0, values.length - (cursor ? 3 : 1))),
-    pool.query<{ name: string; count: string }>(`SELECT category AS name, count(*)::bigint AS count FROM products WHERE ${categoryWhere.sql} GROUP BY category ORDER BY count(*) DESC, category`, categoryValues),
-    pool.query<{ name: string; count: string }>(`SELECT brand AS name, count(*)::bigint AS count FROM products WHERE ${brandWhere.sql} GROUP BY brand ORDER BY count(*) DESC, brand`, brandValues),
-    pool.query<{ min: string | null; max: string | null }>(`SELECT min(price)::text AS min, max(price)::text AS max FROM products WHERE ${rangeWhere.sql}`, [...queryParams, ...rangeWhere.values]),
+    pool.query(countSql, countWhere.values),
+    pool.query<{ name: string; count: string }>(`SELECT category AS name, count(*)::bigint AS count FROM products WHERE ${categoryWhere.sql} GROUP BY category ORDER BY count(*) DESC, category`, categoryWhere.values),
+    pool.query<{ name: string; count: string }>(`SELECT brand AS name, count(*)::bigint AS count FROM products WHERE ${brandWhere.sql} GROUP BY brand ORDER BY count(*) DESC, brand`, brandWhere.values),
+    pool.query<{ min: string | null; max: string | null }>(`SELECT min(price)::text AS min, max(price)::text AS max FROM products WHERE ${rangeWhere.sql}`, rangeWhere.values),
   ]);
   const hasMore = rows.rows.length > input.limit;
   const pageRows = (hasMore ? rows.rows.slice(0, input.limit) : rows.rows) as (ProductRow & { rank: number })[];

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS products (
   active boolean NOT NULL DEFAULT true,
   version integer NOT NULL DEFAULT 1,
   search_text text GENERATED ALWAYS AS (
-    lower(concat_ws(' ', sku, name, brand, category, description, specs::text))
+    lower(sku || ' ' || name || ' ' || brand || ' ' || category || ' ' || description || ' ' || specs::text)
   ) STORED,
   search_vector tsvector GENERATED ALWAYS AS (
     setweight(to_tsvector('simple', coalesce(name, '')), 'A') ||
